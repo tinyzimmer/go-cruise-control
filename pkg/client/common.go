@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"os"
 	"reflect"
 	"strings"
 	"time"
@@ -41,7 +40,6 @@ func (c *Client) newURL(endpoint string) *url.URL {
 }
 
 func (c *Client) do(method string, u *url.URL, out interface{}) error {
-	fmt.Fprint(os.Stderr, u.String())
 	req, err := http.NewRequest(method, u.String(), nil)
 	if err != nil {
 		return err
@@ -62,7 +60,6 @@ func (c *Client) do(method string, u *url.URL, out interface{}) error {
 		}
 		return serr
 	}
-	fmt.Println(string(body))
 	return json.Unmarshal(body, out)
 }
 
