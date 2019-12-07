@@ -13,16 +13,22 @@ import (
 	"github.com/tinyzimmer/go-cruise-control/pkg/types"
 )
 
+// ServerError implements error and represents a server-side exception from
+// CruiseControl.
 type ServerError struct {
 	ErrorMessage string `json:"errorMessage"`
 	StackTrace   string `json:"stackTrace"`
 	Version      int    `json:"version"`
 }
 
+// Error returns the main error message from a ServerError.
 func (s *ServerError) Error() string {
 	return s.ErrorMessage
 }
 
+// basicRequest performs a request with the given method to the given endpoint.
+// Opts are optionally validated and then transformed to URL arguments. The
+// out interface (or error) will hold the server response.
 func (c *Client) basicRequest(method, endpoint string, opts interface{}, out interface{}) error {
 	if validator, ok := opts.(interface{ Validate() error }); ok {
 		if err := validator.Validate(); err != nil {
@@ -33,12 +39,16 @@ func (c *Client) basicRequest(method, endpoint string, opts interface{}, out int
 	return c.do(method, u, out)
 }
 
+// newURL returns the full URL to the given endpoint.
 func (c *Client) newURL(endpoint string) *url.URL {
 	raw := fmt.Sprintf("%s/%s", c.baseURL.String(), endpoint)
 	url, _ := url.Parse(raw)
 	return url
 }
 
+// do handles the actual request to the server. If the response is non-200,
+// it attempts to unmarshal the response into a ServerError. Otherwise, the
+// supplied out interface is used.
 func (c *Client) do(method string, u *url.URL, out interface{}) error {
 	req, err := http.NewRequest(method, u.String(), nil)
 	if err != nil {
@@ -63,6 +73,9 @@ func (c *Client) do(method string, u *url.URL, out interface{}) error {
 	return json.Unmarshal(body, out)
 }
 
+// appendURLOpts transforms the given struct into URL parameters and returns
+// a complete URL. It uses reflectioon and the `param` struct field to determine
+// the correct arguments.
 func appendURLOpts(u *url.URL, opts interface{}) *url.URL {
 	q := u.Query()
 	q.Set("json", "true")
@@ -85,6 +98,8 @@ func appendURLOpts(u *url.URL, opts interface{}) *url.URL {
 	return u
 }
 
+// getParamStrValue will determine the type of the provided value, and return
+// the URL query string equivalent.
 func getParamStrValue(in interface{}) string {
 	switch reflect.TypeOf(in).Name() {
 

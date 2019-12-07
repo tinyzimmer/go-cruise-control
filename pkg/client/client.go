@@ -11,7 +11,8 @@ import (
 )
 
 // CruiseControlClient interface represents an object that carries out
-// Cruise Control operations
+// Cruise Control operations. This interface is intended for mocking. See
+// individual method documentation from the Client struct for usage.
 type CruiseControlClient interface {
 	// READ Methods
 	GetState(*types.GetStateRequest) (*types.GetStateResponse, error)
