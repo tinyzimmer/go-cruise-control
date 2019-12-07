@@ -5,8 +5,10 @@ type GetStateRequest struct {
 	// Substates is a list of substates to report on. If empty, all substate will
 	// be returned.
 	Substates []Substate `param:"substates"`
+
 	// Verbose returns detailed state information.
 	Verbose bool `param:"verbose"`
+
 	// SuperVerbose returns even more detailed state information.
 	SuperVerbose bool `param:"super_verbose"`
 }

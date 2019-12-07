@@ -5,6 +5,7 @@ package types
 type GetKafkaClusterStateRequest struct {
 	// TopicRegex is a regex for filtering partitions to report on.
 	TopicRegex string `param:"topic"`
+
 	// Verbose returns detailed state information.
 	Verbose bool `param:"verbose"`
 }

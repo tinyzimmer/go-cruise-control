@@ -4,33 +4,44 @@ package types
 type GetProposalsRequest struct {
 	// IgnoreProposalCache specifies whether to ignore the proposal cache.
 	IgnoreProposalCache bool `param:"ignore_proposal_cache"`
+
 	// DataFrom specifies whether to generate proposal from available valid partitions
 	// or valid windows.
 	DataFrom DataSource `param:"data_from"`
+
 	// Goals is a list of goals used to generate the proposal.
 	Goals []string `param:"goals"`
+
 	// KafkaAssigner specifies whether to use Kafka assigner mode to generate proposal.
 	KafkaAssigner bool `param:"kafka_assigner"`
+
 	// AllowCapacityEstimation specifies whether to allow broker capacity to be
 	// estimated from other brokers in the cluster.
 	AllowCapacityEstimation bool `param:"allow_capacity_estimation"`
+
 	// ExcludedTopicsRegex is a regular expression to specify topic(s) not to be
 	// considered for replica movement.
 	ExcludedTopicsRegex string `param:"excluded_topics"`
+
 	// UseReadyDefaultGoals specifies whether to only use ready goals to generate
 	// proposal.
 	UseReadyDefaultGoals bool `param:"use_ready_default_goals"`
+
 	// ExcludeRecentlyDemotedBrokers specifies whether to allow leader replicas
 	// to be moved to recently demoted broker.
 	ExcludeRecentlyDemotedBrokers bool `param:"exclude_recently_demoted_brokers"`
+
 	// ExcludeRecentlyRemovedBrokers specifies whether to allow replicas to be
 	// moved to recently removed broker.
 	ExcludeRecentlyRemovedBrokers bool `param:"exclude_recently_removed_brokers"`
+
 	// DestinationBrokerIDs specifies brokers to consider moving replicas to.
 	DestinationBrokerIDs []string `param:"destination_broker_ids"`
+
 	// RebalanceDisk specifies whether to balance load between brokers or between
 	// disks within a broker.
 	RebalanceDisk bool `param:"rebalance_disk"`
+
 	// Verbose returns detailed state information.
 	Verbose bool `param:"verbose"`
 }
