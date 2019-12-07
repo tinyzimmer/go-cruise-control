@@ -1,24 +1,22 @@
 package types
 
-type Substate string
-
-const (
-	SubstateAnalyzer        Substate = "analyzer"
-	SubstateMonitor         Substate = "monitor"
-	SubstateExecutor        Substate = "executor"
-	SubstateAnomalyDetector Substate = "anomaly_detector"
-)
-
+// GetStateRequest represents the parameters for a state request.
 type GetStateRequest struct {
-	Substates    []Substate `param:"substates"`
-	Verbose      bool       `param:"verbose"`
-	SuperVerbose bool       `param:"super_verbose"`
+	// Substates is a list of substates to report on. If empty, all substate will
+	// be returned.
+	Substates []Substate `param:"substates"`
+	// Verbose returns detailed state information.
+	Verbose bool `param:"verbose"`
+	// SuperVerbose returns even more detailed state information.
+	SuperVerbose bool `param:"super_verbose"`
 }
 
+// GetStateDefaults returns the defaults for a state request.
 func GetStateDefaults() *GetStateRequest {
 	return &GetStateRequest{}
 }
 
+// GetStateResponse represents the response to a state request.
 type GetStateResponse struct {
 	AnalyzerState        AnalyzerState        `json:"AnalyzerState"`
 	MonitorState         MonitorState         `json:"MonitorState"`
@@ -27,24 +25,28 @@ type GetStateResponse struct {
 	Version              int                  `json:"version"`
 }
 
+// AnalyzerState represents the state of the analyzer.
 type AnalyzerState struct {
 	IsProposalReady bool            `json:"isProposalReady"`
 	ReadyGoals      []string        `json:"readyGoals"`
 	GoalReadiness   []GoalReadiness `json:"goalReadiness"`
 }
 
+// GoalReadiness represents the status of a goal.
 type GoalReadiness struct {
 	Name                     string                   `json:"name"`
 	ModelCompleteRequirement ModelCompleteRequirement `json:"modelCompleteRequirement"`
 	Status                   string                   `json:"status"`
 }
 
+// ModelCompleteRequirement represents the requirements for which a model is complete.
 type ModelCompleteRequirement struct {
 	IncludeAllTopics                 bool    `json:"includeAllTopics"`
 	MinMonitoredPartitionsPercentage float64 `json:"minMonitoredPartitionsPercentage"`
 	RequiredNumSnapshots             int     `json:"requiredNumSnapshots"`
 }
 
+// MonitorState represents the state of the monitor.
 type MonitorState struct {
 	TrainingPct                 float64            `json:"trainingPct"`
 	Trained                     bool               `json:"trained"`
@@ -58,10 +60,12 @@ type MonitorState struct {
 	NumValidPartitions          int                `json:"numValidPartitions"`
 }
 
+// ExecutorState represents the state of the executor.
 type ExecutorState struct {
 	State string `json:"state"`
 }
 
+// AnomalyDetectorState represents the state of the anomaly detector.
 type AnomalyDetectorState struct {
 	RecentBrokerFailures    []Anomaly              `json:"recentBrokerFailures"`
 	RecentGoalViolations    []Anomaly              `json:"recentGoalViolations"`
@@ -73,6 +77,7 @@ type AnomalyDetectorState struct {
 	SelfHealingEnabledRatio map[string]float64     `json:"selfHealingEnabledRatio"`
 }
 
+// Anomaly represents the details about an anomaly in the cluster.
 type Anomaly struct {
 	Description    string `json:"description"`
 	AnomalyID      string `json:"anomalyId"`
@@ -81,6 +86,7 @@ type Anomaly struct {
 	Status         string `json:"status"`
 }
 
+// AnomalyDetectorMetrics represents the metrics for the anomaly detector.
 type AnomalyDetectorMetrics struct {
 	MeanTimeToStartFixMs       float64            `json:"meanTimeToStartFixMs"`
 	NumSelfHealingStarted      int                `json:"numSelfHealingStarted"`
