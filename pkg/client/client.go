@@ -41,6 +41,8 @@ type Client struct {
 	baseURL *url.URL
 	// The http client used for requests. It should include a cookiejar for session tracking.
 	httpClient *http.Client
+	// credentials contains any user credentials provided in client options.
+	credentials *types.BasicAuthCredentials
 }
 
 // New creates a new CruiseControlClient with the given options
@@ -55,9 +57,16 @@ func New(opts *types.ClientOptions) (CruiseControlClient, error) {
 	if err != nil {
 		return nil, err
 	}
-	// Return a new client with the configured API path and cookie jar
-	return &Client{
+	// Create a new client with the configured API path and cookie jar
+	c := &Client{
 		baseURL:    url,
 		httpClient: &http.Client{Jar: cookieJar},
-	}, nil
+	}
+
+	// If basic auth credentials are provided, add them to the client
+	if opts.BasicAuth != nil {
+		c.credentials = opts.BasicAuth
+	}
+
+	return c, nil
 }

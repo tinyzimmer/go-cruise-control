@@ -54,6 +54,9 @@ func (c *Client) do(method string, u *url.URL, out interface{}) error {
 	if err != nil {
 		return err
 	}
+	if c.credentials != nil {
+		req.SetBasicAuth(c.credentials.Username, c.credentials.Password)
+	}
 	res, err := c.httpClient.Do(req)
 	if err != nil {
 		return err
@@ -74,7 +77,7 @@ func (c *Client) do(method string, u *url.URL, out interface{}) error {
 }
 
 // appendURLOpts transforms the given struct into URL parameters and returns
-// a complete URL. It uses reflectioon and the `param` struct field to determine
+// a complete URL. It uses reflection and the `param` struct field to determine
 // the correct arguments.
 func appendURLOpts(u *url.URL, opts interface{}) *url.URL {
 	q := u.Query()

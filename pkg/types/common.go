@@ -51,7 +51,15 @@ const (
 
 // ClientOptions contains the parameters for creating a new Cruise Control client.
 type ClientOptions struct {
-	URL string
+	URL       string
+	BasicAuth *BasicAuthCredentials
+}
+
+// BasicAuthCredentials contains the username and password to use for HTTP
+// basic authentication.
+type BasicAuthCredentials struct {
+	Username string
+	Password string
 }
 
 // ClusterLoad represents the load data for hosts and brokers in a cluster.
